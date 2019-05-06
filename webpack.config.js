@@ -18,15 +18,11 @@ module.exports = {
         historyApiFallback: true
     },
     module: {
-        loaders: [
+        rules: [
             {
-                test: /\.js/,
-                loaders: ['babel-loader'],
-                include: path.join(__dirname, 'src')
-            },
-            {
-                test: /\.css/,
-                loaders: ['style-loader', 'css-loader'],
+                test: /\.js$/,
+                use: ['babel-loader'],
+                exclude: /node_modules/
             }
         ]
     }
