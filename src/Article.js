@@ -5,7 +5,7 @@ export default class Article extends Component {
         super(props);
 
         this.state = {
-            isOpen: false
+            isOpen: true
         };
     }
     render() {
@@ -38,7 +38,6 @@ export default class Article extends Component {
 
 /*
 export default function Article(props) {
-    'use strict';
     const {article} = props;
     // console.log('---', props);
     return (
