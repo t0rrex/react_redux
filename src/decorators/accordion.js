@@ -1,15 +1,16 @@
 import React from 'react';
 
 export default Component => class Accordion extends React.Component {
-    state = {
-        openItemId: null
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            openItemId: props.defaultOpenId
+        }
+    }
 
     render() {
-        // console.log('---', 'accordion', this.props);
-        return <Component {...this.props}
-                          toggleOpenItem = {this.toggleOpenItem}
-                          openItemId = {this.state.openItemId}/>
+        return <Component {...this.props} toggleOpenItem={this.toggleOpenItem}
+                          openItemId={this.state.openItemId}/>
     }
 
     toggleOpenItem = openItemId => ev => {
@@ -17,5 +18,4 @@ export default Component => class Accordion extends React.Component {
             openItemId: openItemId === this.state.openItemId ? null : openItemId
         })
     }
-
 }
