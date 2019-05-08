@@ -1,4 +1,4 @@
-import React, {Component as ReactComponent} from 'react'
+import React, {Component as ReactComponent} from 'react';
 
 export default (OriginalComponent) => class WrappedComponent extends ReactComponent {
     state = {
@@ -7,7 +7,7 @@ export default (OriginalComponent) => class WrappedComponent extends ReactCompon
 
     render() {
         return <OriginalComponent {...this.props} {...this.state}
-                                  toggleOpen = {this.toggleOpen} ref = {this.getRef}/>
+                                  toggleOpen = {this.toggleOpen} />
     }
 
     toggleOpen = (ev) => {
@@ -17,7 +17,4 @@ export default (OriginalComponent) => class WrappedComponent extends ReactCompon
         })
     };
 
-    getRef = (ref) => {
-        // console.log('---', ref)
-    }
 }

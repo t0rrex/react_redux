@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import CommentList from './CommentList';
 
-class Article extends Component {
+class Article extends PureComponent {
     static propTypes = {
         article: PropTypes.shape({
             id: PropTypes.string.isRequired,
@@ -13,13 +13,15 @@ class Article extends Component {
         toggleOpen: PropTypes.func
     };
 
-    componentWillReceiveProps(nextProps) {
-        console.log('---', 'updating', this.props.isOpen, nextProps.isOpen)
-    }
+    state = {
+        updateIndex: 0
+    };
 
-    componentWillMount() {
-        console.log('---', 'mounting')
-    }
+    /*
+        shouldComponentUpdate(nextProps, nextState) {
+            return nextProps.isOpen !== this.props.isOpen
+        }
+    */
 
     render() {
         const {article, isOpen, toggleOpen} = this.props;
@@ -35,27 +37,25 @@ class Article extends Component {
     }
 
     setContainerRef = ref => {
-        this.container = ref;
-        console.log('---', ref)
+        // this.container = ref
+//        console.log('---', ref)
     };
-
-    componentDidMount() {
-        console.log('---', 'mounted')
-    }
 
     getBody() {
         const {article, isOpen} = this.props;
+        console.log('---', 'update');
         if (!isOpen) return null;
         return (
             <section>
                 {article.text}
-                <CommentList comments = {article.comments} ref = {this.setCommentsRef}/>
+                <button onClick = {() => this.setState({updateIndex: this.state.updateIndex + 1})}>update</button>
+                <CommentList comments = {article.comments} ref = {this.setCommentsRef} key = {this.state.updateIndex}/>
             </section>
         )
     }
 
     setCommentsRef = ref => {
-//        console.log('---', findDOMNode(ref))
+//        console.log('---', ref)
     }
 }
 
