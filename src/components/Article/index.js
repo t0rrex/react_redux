@@ -1,8 +1,8 @@
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import CommentList from './CommentList';
+import CommentList from '../CommentList';
 import { CSSTransitionGroup } from 'react-transition-group';
-import './article.css';
+import './style.css';
 
 class Article extends PureComponent {
     static propTypes = {
@@ -33,13 +33,13 @@ class Article extends PureComponent {
                 <button onClick = {toggleOpen}>
                     {isOpen ? 'close' : 'open'}
                 </button>
-                    {this.getBody()}
+                {this.getBody()}
             </div>
         )
     }
 
     setContainerRef = ref => {
- //       this.container = ref
+        // this.container = ref
 //        console.log('---', ref)
     };
 
@@ -51,14 +51,11 @@ class Article extends PureComponent {
             <section>
                 {article.text}
                 <button onClick = {() => this.setState({updateIndex: this.state.updateIndex + 1})}>update</button>
-                <CommentList comments = {article.comments} ref = {this.setCommentsRef} key = {this.state.updateIndex}/>
+                <CommentList comments = {article.comments} key = {this.state.updateIndex}/>
             </section>
         )
     }
 
-    setCommentsRef = ref => {
-//        console.log('---', ref)
-    }
 }
 
 export default Article

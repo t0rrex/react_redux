@@ -11,9 +11,10 @@ class SelectFilter extends Component {
         articles: PropTypes.array.isRequired
     };
 
-    handleChange = selected => this.setState({selected});
+    handleChange = selected => this.setState({ selected });
 
     render() {
+        console.log(this.state.selected);
         const { selected } = this.state;
         const { articles } = this.props;
 
@@ -25,8 +26,8 @@ class SelectFilter extends Component {
         return <Select
             options={options}
             value={selected}
-            multi={true}
             onChange={this.handleChange}
+            multi
         />
     }
 }
