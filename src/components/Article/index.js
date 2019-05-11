@@ -1,7 +1,10 @@
 import React, {Component, PureComponent} from 'react';
+import {findDOMNode} from 'react-dom';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import CommentList from '../CommentList';
 import { CSSTransitionGroup } from 'react-transition-group';
+import {deleteArticle} from '../../AC';
 import './style.css';
 
 class Article extends PureComponent {
@@ -33,10 +36,17 @@ class Article extends PureComponent {
                 <button onClick = {toggleOpen}>
                     {isOpen ? 'close' : 'open'}
                 </button>
+                <button onClick = {this.handleDelete}>delete me</button>
                 {this.getBody()}
             </div>
         )
     }
+
+    handleDelete = () => {
+        const {deleteArticle, article} = this.props;
+        deleteArticle(article.id);
+        console.log('---', 'deleting article')
+    };
 
     setContainerRef = ref => {
         // this.container = ref
@@ -51,11 +61,14 @@ class Article extends PureComponent {
             <section>
                 {article.text}
                 <button onClick = {() => this.setState({updateIndex: this.state.updateIndex + 1})}>update</button>
-                <CommentList comments = {article.comments} key = {this.state.updateIndex}/>
+                <CommentList comments = {article.comments} ref = {this.setCommentsRef} key = {this.state.updateIndex}/>
             </section>
         )
     }
 
+    setCommentsRef = ref => {
+//        console.log('---', ref)
+    }
 }
 
-export default Article
+export default connect(null, { deleteArticle })(Article)
