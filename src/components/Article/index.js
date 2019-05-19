@@ -1,10 +1,10 @@
 import React, {Component, PureComponent} from 'react';
-import {findDOMNode} from 'react-dom';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import CommentList from '../CommentList';
 import {CSSTransitionGroup} from 'react-transition-group';
-import {deleteArticle} from '../../AC';
+import {deleteArticle, loadArticle} from '../../AC';
+import Loader from '../Loader';
 import './style.css';
 
 class Article extends PureComponent {
@@ -21,6 +21,16 @@ class Article extends PureComponent {
     state = {
         updateIndex: 0
     };
+
+    componentWillReceiveProps({isOpen, loadArticle, article}) {
+        if (isOpen && !article.text && !article.loading) loadArticle(article.id)
+    }
+
+    /*
+        shouldComponentUpdate(nextProps, nextState) {
+            return nextProps.isOpen !== this.props.isOpen
+        }
+    */
 
     render() {
         const {article, isOpen, toggleOpen} = this.props;
@@ -50,11 +60,12 @@ class Article extends PureComponent {
     getBody() {
         const {article, isOpen} = this.props;
         if (!isOpen) return null;
+        if (article.loading) return <Loader/>;
         return (
             <section>
                 {article.text}
                 <button onClick={() => this.setState({updateIndex: this.state.updateIndex + 1})}>update</button>
-                <CommentList comments={article.comments} ref={this.setCommentsRef} key={this.state.updateIndex}/>
+                <CommentList article={article} ref={this.setCommentsRef} key={this.state.updateIndex}/>
             </section>
         )
     }
@@ -64,4 +75,4 @@ class Article extends PureComponent {
     }
 }
 
-export default connect(null, {deleteArticle})(Article)
+export default connect(null, { deleteArticle, loadArticle })(Article)
