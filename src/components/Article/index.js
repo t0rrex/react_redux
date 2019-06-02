@@ -9,21 +9,25 @@ import './style.css';
 
 class Article extends PureComponent {
     static propTypes = {
-        article: PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            title: PropTypes.string.isRequired,
-            text: PropTypes.string
-        }).isRequired,
+        id: PropTypes.string.isRequired,
         isOpen: PropTypes.bool,
-        toggleOpen: PropTypes.func
+        toggleOpen: PropTypes.func,
+        //from connect
+        article: PropTypes.shape({
+            id: PropTypes.string,
+            title: PropTypes.string,
+            text: PropTypes.string
+        })
     };
 
     state = {
-        updateIndex: 0
+        updateIndex: 0,
+        areCommentsOpen: false
     };
 
-    componentWillReceiveProps({isOpen, loadArticle, article}) {
-        if (isOpen && !article.text && !article.loading) loadArticle(article.id)
+    componentDidMount() {
+        const {loadArticle, article, id} = this.props;
+        if (!article  || (!article.text && !article.loading)) loadArticle(id)
     }
 
     /*
@@ -34,10 +38,11 @@ class Article extends PureComponent {
 
     render() {
         const {article, isOpen, toggleOpen} = this.props;
+        if (!article) return null;
         return (
-            <div ref={this.setContainerRef}>
+            <div ref = {this.setContainerRef}>
                 <h3>{article.title}</h3>
-                <button onClick={toggleOpen}>
+                <button onClick = {toggleOpen}>
                     {isOpen ? 'close' : 'open'}
                 </button>
                 <button onClick={this.handleDelete}>delete me</button>
@@ -53,7 +58,7 @@ class Article extends PureComponent {
     };
 
     setContainerRef = ref => {
-        // this.container = ref
+        this.container = ref
 //        console.log('---', ref)
     };
 
@@ -64,15 +69,18 @@ class Article extends PureComponent {
         return (
             <section>
                 {article.text}
-                <button onClick={() => this.setState({updateIndex: this.state.updateIndex + 1})}>update</button>
-                <CommentList article={article} ref={this.setCommentsRef} key={this.state.updateIndex}/>
+                <button onClick = {() => this.setState({updateIndex: this.state.updateIndex + 1})}>update</button>
+                <CommentList article = {article} ref = {this.setCommentsRef} key = {this.state.updateIndex}/>
             </section>
         )
     }
 
     setCommentsRef = ref => {
+        this.comments = ref
 //        console.log('---', ref)
     }
 }
 
-export default connect(null, { deleteArticle, loadArticle })(Article)
+export default connect((state, ownProps) => ({
+    article: state.articles.entities.get(ownProps.id)
+}), { deleteArticle, loadArticle })(Article)
